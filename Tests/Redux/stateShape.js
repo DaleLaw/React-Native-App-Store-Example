@@ -1,42 +1,36 @@
 export const stateShape = {
-  app: {
-    search: {
-      keyword: 'keywords',
-    },
+  search: {
+    keyword: 'keywords',
+  },
 
-    recommendations: {
-      all: {
-        id: {
-          img: 'http://example.com/1.jpg',
-          name: 'An Awesome App',
-          category: 'Games',
-        },
-      },
-      ids: ['id', 'id2'],
-      fetchState: 'NOT_FETCHED', // either be 'NOT_FETCHED', 'IN_PROGRESS', 'SUCCESS', 'ERROR'
-      error: '',
-    },
-
-    freeApps: {
-      all: {
-        id: {
-          img: 'http://example.com/1.jpg',
-          name: 'An Awesome App',
-          category: 'Games',
-          averageUserRating: 4.5,
-          userRatingCount: 63,
-        },
-      },
-      currentPage: 0,
-      pages: {
-        1: {
-          ids: ['id', 'id2'],
-          fetchState: 'NOT_FETCHED', // either be 'NOT_FETCHED', 'IN_PROGRESS', 'SUCCESS', 'ERROR'
-          error: '',
-        },
+  recommendations: {
+    all: {
+      id: {
+        img: 'http://example.com/1.jpg',
+        name: 'An Awesome App',
+        category: 'Games',
       },
     },
+    ids: ['id', 'id2'],
+    fetchState: 'NOT_FETCHED', // either be 'NOT_FETCHED', 'IN_PROGRESS', 'SUCCESS', 'ERROR'
+    error: '',
+  },
 
-    noNetwork: false,
+  freeApps: {
+    all: {
+      id: {
+        img: 'http://example.com/1.jpg',
+        name: 'An Awesome App',
+        category: 'Games',
+        averageUserRating: 4.5,
+        userRatingCount: 63,
+        fetchState: 'NOT_FETCHED', // either be 'NOT_FETCHED', 'IN_PROGRESS', 'SUCCESS', 'ERROR'
+        error: '',
+      },
+    },
+    currentPage: 0,
+    ids: [],
+    fetchState: 'NOT_FETCHED', // either be 'NOT_FETCHED', 'IN_PROGRESS', 'SUCCESS', 'ERROR'
+    error: '',
   },
 }

@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { createSelector } from 'reselect'
 import { makeSelectSearchKeyword } from './SearchSelectors'
 
@@ -8,16 +7,12 @@ export const selectFreeAppsDomain = () => (state) => state.freeApps
 export const makeSelectAllFreeApps = () => createSelector(
   selectFreeAppsDomain(),
   (freeApps) => {
-    const { all, currentPage, pages } = freeApps
-    // We use _.range() to loop from 1 to currentPage
-    // then use flatMap() to get ids array from each page and flatten them into single array
-    // then use map() to get the app object, and add the id attribute
-    return _.flatMap(_.range(1, currentPage + 1),
-      (i) => pages[i].ids)
-      .map((id) => ({
-        ...all[id],
-        id,
-      }))
+    const { all, ids } = freeApps
+    // We use map() to get the app object, and add the id attribute
+    return ids.map((id) => ({
+      ...all[id],
+      id,
+    }))
   }
 )
 
@@ -32,9 +27,9 @@ export const makeSelectFilteredFreeApps = () => createSelector(
 )
 
 // Select current page fetch state
-export const makeSelectPageFetchState = () => createSelector(
+export const makeSelectFreeAppsFetchState = () => createSelector(
   selectFreeAppsDomain(),
-  (substate) => substate.pages[substate.currentPage].fetchState
+  (substate) => substate.fetchState
 )
 
 export default selectFreeAppsDomain

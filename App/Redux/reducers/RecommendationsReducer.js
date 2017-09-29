@@ -15,7 +15,7 @@ export const recommendations = (state = initialState, action = {}) => {
     case FETCH_RECOMMENDATIONS:
       // clear all the saved data,
       // and set the fetch state as in progress
-      return initialState
+      return state
         .set('fetchState', FetchState.IN_PROGRESS)
     case FETCH_RECOMMENDATIONS_SUCCESS:
       return state
