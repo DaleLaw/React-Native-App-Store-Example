@@ -6,10 +6,12 @@ import DebugConfig from '../Config/DebugConfig'
 /* ------------- Types ------------- */
 
 import { StartupTypes } from '../Redux/StartupRedux'
+import { INIT_APP_LIST, LOAD_NEXT_PAGE } from '../Redux/actions'
 
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
+import { initAppListSaga, loadNextPageSaga } from './AppListSagas'
 
 /* ------------- API ------------- */
 
@@ -23,5 +25,7 @@ export default function* root() {
   yield [
     // some sagas only receive an action
     takeLatest(StartupTypes.STARTUP, startup),
+    takeLatest(INIT_APP_LIST, initAppListSaga),
+    takeLatest(LOAD_NEXT_PAGE, loadNextPageSaga),
   ]
 }
