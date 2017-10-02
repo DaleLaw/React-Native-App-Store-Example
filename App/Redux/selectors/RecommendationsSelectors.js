@@ -28,7 +28,7 @@ export const makeSelectFilteredRecommendations = () => createSelector(
 )
 
 // Select fetch state
-export const makeSelectFetchState = () => createSelector(
+export const makeSelectRecommendationsFetchState = () => createSelector(
   selectRecommendationsDomain(),
   (substate) => substate.fetchState
 )

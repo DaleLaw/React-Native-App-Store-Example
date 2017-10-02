@@ -1,5 +1,5 @@
 import Immutable from 'seamless-immutable'
-import { selectRecommendationsDomain, makeSelectAllRecommendations, makeSelectFilteredRecommendations, makeSelectFetchState } from '../../../App/Redux/selectors/RecommendationsSelectors'
+import { selectRecommendationsDomain, makeSelectAllRecommendations, makeSelectFilteredRecommendations, makeSelectRecommendationsFetchState } from '../../../App/Redux/selectors/RecommendationsSelectors'
 import FetchState from '../../../App/Constants/FetchState'
 
 describe('RecommendationsSelectors', () => {
@@ -65,7 +65,7 @@ describe('RecommendationsSelectors', () => {
   })
 
   it('should select fetch state', () => {
-    const selector = makeSelectFetchState()
+    const selector = makeSelectRecommendationsFetchState()
     expect(selector(globalState)).toEqual(FetchState.SUCCESS)
   })
 })
