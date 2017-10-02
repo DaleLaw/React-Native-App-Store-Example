@@ -50,6 +50,10 @@ export const fetchRecommendationsFailed = (error) => ({
   error,
 })
 
+export const initAppList = () => ({
+  type: INIT_APP_LIST,
+})
+
 export const loadNextPage = (nextPage) => ({
   type: LOAD_NEXT_PAGE,
   nextPage,
