@@ -22,7 +22,7 @@ export function* autoRetry(func) {
   for (let i = 0; i < RETRY_LIMIT; i += 1) {
     try {
       const response = yield func
-      if (!response.ok) {
+      if (response.ok) {
         return response
       }
     } catch (e) {
@@ -37,7 +37,7 @@ export function* fetchFreeApps() {
     const response = yield autoRetry(call(api.getTopFree))
     const entries = response.data.feed.entry
     const ids = _.map(entries, (e) => e.id.attributes['im:id'])
-    const apps = _.keyBy(entries, (e) => e.id.attributes['im:id']).map((e) => ({
+    const apps = _.mapValues(_.keyBy(entries, (e) => e.id.attributes['im:id']), (e) => ({
       img: e['im:image'][2].label,
       name: e['im:name'].label,
       category: e.category.attributes.label,
@@ -55,10 +55,10 @@ export function* fetchRecommendations() {
     const response = yield autoRetry(call(api.getRecommendations))
     const entries = response.data.feed.entry
     const ids = _.map(entries, (e) => e.id.attributes['im:id'])
-    const apps = _.keyBy(entries, (e) => e.id.attributes['im:id']).map((e) => ({
-      img: e['im:image'][2].label,
-      name: e['im:name'].label,
-      category: e.category.attributes.label,
+    const apps = _.mapValues(_.keyBy(entries, (app) => app.id.attributes['im:id']), (app) => ({
+      img: app['im:image'][2].label,
+      name: app['im:name'].label,
+      category: app.category.attributes.label,
       fetchState: FetchState.NOT_FETCHED,
       error: null,
     }))
@@ -84,10 +84,10 @@ export function* fetchAppDetails(appId) {
 
 export function* loadNextPageSaga() {
   const ids = yield select(makeSelectCurrentPageAppIds())
-  yield all(ids.map((id) => autoRetry(call(fetchAppDetails(id)))))
+  yield all(ids.map((id) => call(fetchAppDetails, id)))
 }
 
 export function* initAppListSaga() {
-  yield all(call(fetchRecommendations), call(fetchFreeApps))
+  yield all([call(fetchRecommendations), call(fetchFreeApps)])
   yield put(loadNextPage()) // Immediately load first page details
 }

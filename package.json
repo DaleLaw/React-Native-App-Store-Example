@@ -48,7 +48,7 @@
     "redux": "^3.6.0",
     "redux-freeze": "^0.1.5",
     "redux-persist": "^4.1.0",
-    "redux-saga": "^0.14.3",
+    "redux-saga": "^0.15.6",
     "redux-undo": "1.0.0-beta7",
     "reduxsauce": "0.4.1",
     "reselect": "^3.0.1",
