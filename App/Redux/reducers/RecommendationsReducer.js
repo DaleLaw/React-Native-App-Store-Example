@@ -1,5 +1,10 @@
 import Immutable from 'seamless-immutable'
-import { RESET, FETCH_RECOMMENDATIONS, FETCH_RECOMMENDATIONS_SUCCESS, FETCH_RECOMMENDATIONS_FAILED } from '../actions'
+import {
+  RESET,
+  INIT_APP_LIST,
+  FETCH_RECOMMENDATIONS_SUCCESS,
+  FETCH_RECOMMENDATIONS_FAILED,
+} from '../actions'
 import FetchState from '../../Constants/FetchState'
 
 export const initialState = Immutable({
@@ -12,7 +17,7 @@ export const recommendations = (state = initialState, action = {}) => {
   switch (action.type) {
     case RESET:
       return initialState
-    case FETCH_RECOMMENDATIONS:
+    case INIT_APP_LIST:
       // clear all the saved data,
       // and set the fetch state as in progress
       return state

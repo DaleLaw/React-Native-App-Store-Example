@@ -1,5 +1,5 @@
 import Immutable from 'seamless-immutable'
-import { selectFreeAppsDomain, makeSelectAllFreeApps, makeSelectFilteredFreeApps, makeSelectFreeAppsFetchState } from '../../../App/Redux/selectors/FreeAppsSelectors'
+import { selectFreeAppsDomain, makeSelectAllFreeApps, makeSelectFilteredFreeApps, makeSelectCurrentPageAppIds, makeSelectFreeAppsFetchState } from '../../../App/Redux/selectors/FreeAppsSelectors'
 import FetchState from '../../../App/Constants/FetchState'
 
 describe('FreeAppsSelectors', () => {
@@ -12,7 +12,7 @@ describe('FreeAppsSelectors', () => {
         4: { img: '', name: 'ddd', category: 'Games', fetchState: FetchState.SUCCESS, averageUserRating: 4, userRatingCount: 10 },
         5: { img: '', name: 'eeetest', category: 'Games', fetchState: FetchState.SUCCESS, averageUserRating: 4, userRatingCount: 10 },
       },
-      currentPage: 2,
+      currentPage: 0,
       ids: [1, 2, 3, 4, 5],
       fetchState: FetchState.SUCCESS,
     },
@@ -63,6 +63,11 @@ describe('FreeAppsSelectors', () => {
     state.search.keyword = 'noMatch'
     const selector = makeSelectFilteredFreeApps()
     expect(selector(state)).toEqual([])
+  })
+
+  it('should select current page app ids', () => {
+    const selector = makeSelectCurrentPageAppIds()
+    expect(selector(globalState)).toEqual([1, 2, 3, 4, 5])
   })
 
   it('should select current page fetch state', () => {

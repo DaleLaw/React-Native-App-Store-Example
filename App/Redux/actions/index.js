@@ -1,8 +1,7 @@
 // Actions
-export const FETCH_TOP_FREE_APPS = 'app/FETCH_TOP_FREE_APPS'
+export const INIT_APP_LIST = 'app/INIT_APP_LIST'
 export const FETCH_TOP_FREE_APPS_SUCCESS = 'app/FETCH_TOP_FREE_APPS_SUCCESS'
 export const FETCH_TOP_FREE_APPS_FAILED = 'app/FETCH_TOP_FREE_APPS_FAILED'
-export const FETCH_APP_DETAILS = 'app/FETCH_APP_DETAILS'
 export const FETCH_APP_DETAILS_SUCCESS = 'app/FETCH_APP_DETAILS_SUCCESS'
 export const FETCH_APP_DETAILS_FAILED = 'app/FETCH_APP_DETAILS_FAILED'
 export const FETCH_RECOMMENDATIONS = 'app/FETCH_RECOMMENDATIONS'
@@ -13,10 +12,6 @@ export const SEARCH = 'app/SEARCH'
 export const RESET = 'app/RESET'
 
 // Action creators
-export const fetchTopFreeApps = () => ({
-  type: FETCH_TOP_FREE_APPS,
-})
-
 export const fetchTopFreeAppsSuccess = (apps, ids) => ({
   type: FETCH_TOP_FREE_APPS_SUCCESS,
   apps,
@@ -26,11 +21,6 @@ export const fetchTopFreeAppsSuccess = (apps, ids) => ({
 export const fetchTopFreeAppsFailed = (error) => ({
   type: FETCH_TOP_FREE_APPS_FAILED,
   error,
-})
-
-export const fetchAppDetails = (appId) => ({
-  type: FETCH_APP_DETAILS,
-  appId,
 })
 
 export const fetchAppDetailsSuccess = (appId, details) => ({

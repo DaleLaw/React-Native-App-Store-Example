@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable'
 import { initialState, recommendations } from '../../../App/Redux/reducers/RecommendationsReducer'
-import { FETCH_RECOMMENDATIONS, FETCH_RECOMMENDATIONS_SUCCESS, FETCH_RECOMMENDATIONS_FAILED, RESET } from '../../../App/Redux/actions'
+import { INIT_APP_LIST, FETCH_RECOMMENDATIONS_SUCCESS, FETCH_RECOMMENDATIONS_FAILED, RESET } from '../../../App/Redux/actions'
 import FetchState from '../../../App/Constants/FetchState'
 
 describe('RecommendationsReducer', () => {
@@ -17,8 +17,8 @@ describe('RecommendationsReducer', () => {
     error: 'Internal Server Error',
   }
 
-  it('should update correctly for action FETCH_RECOMMENDATIONS', () => {
-    const state1 = recommendations(initialState, { type: FETCH_RECOMMENDATIONS })
+  it('should update correctly for action INIT_APP_LIST', () => {
+    const state1 = recommendations(initialState, { type: INIT_APP_LIST })
     expect(state1.fetchState).toEqual(FetchState.IN_PROGRESS)
   })
 
@@ -45,7 +45,7 @@ describe('RecommendationsReducer', () => {
   })
 
   it('should return initial state for action RESET', () => {
-    const state1 = recommendations(initialState, { type: FETCH_RECOMMENDATIONS, page: 1 })
+    const state1 = recommendations(initialState, { type: INIT_APP_LIST, page: 1 })
     const state2 = recommendations(state1, mockSuccessAction)
     const state3 = recommendations(state2, { type: RESET })
     expect(state3).toEqual(initialState)

@@ -32,4 +32,12 @@ export const makeSelectFreeAppsFetchState = () => createSelector(
   (substate) => substate.fetchState
 )
 
+export const makeSelectCurrentPageAppIds = () => createSelector(
+  selectFreeAppsDomain(),
+  (state) => {
+    const { ids, currentPage } = state
+    return ids.slice(currentPage * 10, (currentPage + 1) * 10)
+  }
+)
+
 export default selectFreeAppsDomain
