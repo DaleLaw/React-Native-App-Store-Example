@@ -45,7 +45,7 @@ export function* fetchFreeApps() {
       error: null,
     }))
     yield put(fetchTopFreeAppsSuccess(apps, ids))
-    // yield put(loadNextPage()) // Immediately load first page details
+    yield put(loadNextPage()) // Immediately load first page details
   } catch (e) {
     const message = e && e.message ? e.message : 'Unable to connect to server'
     yield put(fetchTopFreeAppsFailed(message))
