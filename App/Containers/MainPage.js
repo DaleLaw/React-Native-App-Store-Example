@@ -12,7 +12,7 @@ import FreeAppCell from '../Components/FreeAppCell'
 import { makeSelectSearchKeyword } from '../Redux/selectors/SearchSelectors'
 import { makeSelectFilteredFreeApps, makeSelectFreeAppsFetchState, makeSelectCurrentPage } from '../Redux/selectors/FreeAppsSelectors'
 import { makeSelectFilteredRecommendations, makeSelectRecommendationsFetchState } from '../Redux/selectors/RecommendationsSelectors'
-import { initAppList, loadNextPage, search } from '../Redux/actions'
+import { initAppList, loadNextPage, search, reset } from '../Redux/actions'
 import FetchState from '../Constants/FetchState'
 
 const RecommendationListWrapper = styled.View`
@@ -37,17 +37,13 @@ const Wrapper = styled(Container)`
   background: white;
 `
 
-const MyActivityIndicator = styled(ActivityIndicator)`
-  padding-top: 16;
-  padding-bottom: 16;
-`
-
 export class MainPage extends Component {
   static propTypes = {
     freeAppListFetchState: PropTypes.string.isRequired,
     initAppList: PropTypes.func.isRequired,
     loadNextPage: PropTypes.func.isRequired,
     search: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
     currentPage: PropTypes.number.isRequired,
     freeApps: PropTypes.array.isRequired,
     recommendations: PropTypes.array.isRequired,
@@ -81,6 +77,11 @@ export class MainPage extends Component {
       })
       this.props.loadNextPage()
     }
+  }
+
+  onRefresh = () => {
+    this.props.reset()
+    this.props.initAppList()
   }
 
   isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
@@ -133,19 +134,17 @@ export class MainPage extends Component {
     return (
       <Wrapper>
         <AppSearchBar onSearchTextChange={this.onSearchTextChange} />
-        {
-          freeAppListFetchState === FetchState.IN_PROGRESS ?
-            <MyActivityIndicator /> :
-            <FlatList
-              onScroll={this.onScrollVerticalList}
-              onContentSizeChange={this.onContentSizeChange}
-              scrollEventThrottle={2000}
-              data={listItems}
-              keyExtractor={this.keyExtractor}
-              renderItem={this.renderWholeList}
-              ItemSeparatorComponent={this.renderSeparator}
-            />
-        }
+        <FlatList
+          refreshing={freeAppListFetchState === FetchState.IN_PROGRESS}
+          onRefresh={this.onRefresh}
+          onScroll={this.onScrollVerticalList}
+          onContentSizeChange={this.onContentSizeChange}
+          scrollEventThrottle={2000}
+          data={listItems}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.renderWholeList}
+          ItemSeparatorComponent={this.renderSeparator}
+        />
         {
           showEmptyPlaceholder ? <EmptyPlaceholder text={placeholderText} /> : null
         }
@@ -167,6 +166,7 @@ export const mapDispatchToProps = (dispatch) => ({
   initAppList: () => dispatch(initAppList()),
   loadNextPage: () => dispatch(loadNextPage()),
   search: (text) => dispatch(search(text)),
+  reset: () => dispatch(reset()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage)
