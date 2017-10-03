@@ -55,9 +55,8 @@ export class MainPage extends Component {
     this.props.initAppList()
   }
 
-  onSubmit = (text) => {
+  onSearchTextChange = (text) => {
     this.props.search(text)
-    Keyboard.dismiss()
   }
 
   onContentSizeChange = () => {
@@ -124,7 +123,7 @@ export class MainPage extends Component {
     const showNoResultPlaceholder = keyword !== '' && recommendations.length === 0 && freeApps.length === 0
     return (
       <Wrapper>
-        <AppSearchBar onSubmit={this.onSubmit} />
+        <AppSearchBar onSearchTextChange={this.onSearchTextChange} />
         <FlatList
           onScroll={this.onScrollVerticalList}
           onContentSizeChange={this.onContentSizeChange}

@@ -9,21 +9,11 @@ const MHeader = styled(Header)`
 
 class AppSearchBar extends PureComponent {
   static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-  }
-
-  state = {
-    text: '',
+    onSearchTextChange: PropTypes.func.isRequired,
   }
 
   onChangeText = (text) => {
-    this.setState({
-      text,
-    })
-  }
-
-  onSubmitEditing = () => {
-    this.props.onSubmit(this.state.text)
+    this.props.onSearchTextChange(text)
   }
 
   render() {
@@ -36,7 +26,6 @@ class AppSearchBar extends PureComponent {
             returnKeyType={'search'}
             returnKeyLabel={'search'}
             onChangeText={this.onChangeText}
-            onSubmitEditing={this.onSubmitEditing}
           />
         </Item>
       </MHeader>
