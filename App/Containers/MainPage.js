@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container } from 'native-base'
 import AppSearchBar from '../Components/AppSearchBar'
+import NoResultPlaceholder from '../Components/NoResultPlaceholder'
 import RecommendationCell from '../Components/RecommendationCell'
 import FreeAppCell from '../Components/FreeAppCell'
 import { makeSelectSearchKeyword } from '../Redux/selectors/SearchSelectors'
@@ -88,19 +89,25 @@ export class MainPage extends Component {
     <RecommendationCell item={item} index={index} />
   )
 
-  renderRecommendationsList = () => (
-    <RecommendationListWrapper>
-      <RecommendationText>
-        Recommendations
-      </RecommendationText>
-      <FlatList
-        data={this.props.recommendations}
-        keyExtractor={this.keyExtractor}
-        renderItem={this.renderRecommendation}
-        horizontal
-      />
-    </RecommendationListWrapper>
-  )
+  renderRecommendationsList = () => {
+    const { recommendations } = this.props
+    if (recommendations.length > 0) {
+      return (
+        <RecommendationListWrapper>
+          <RecommendationText>
+            Recommendations
+          </RecommendationText>
+          <FlatList
+            data={recommendations}
+            keyExtractor={this.keyExtractor}
+            renderItem={this.renderRecommendation}
+            horizontal
+          />
+        </RecommendationListWrapper>
+      )
+    }
+    return null
+  }
 
   renderWholeList = ({ item, index }) => {
     if (index === 0) {
@@ -112,8 +119,9 @@ export class MainPage extends Component {
   renderSeparator = () => <Separator />
 
   render() {
-    const { freeApps } = this.props
+    const { freeApps, recommendations, keyword } = this.props
     const listItems = ['First Row Is Recommendations'].concat(freeApps)
+    const showNoResultPlaceholder = keyword !== '' && recommendations.length === 0 && freeApps.length === 0
     return (
       <Wrapper>
         <AppSearchBar onSubmit={this.onSubmit} />
@@ -126,6 +134,9 @@ export class MainPage extends Component {
           renderItem={this.renderWholeList}
           ItemSeparatorComponent={this.renderSeparator}
         />
+        {
+          showNoResultPlaceholder ? <NoResultPlaceholder /> : null
+        }
       </Wrapper>
     )
   }

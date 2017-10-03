@@ -43,7 +43,7 @@ export const makeSelectFilteredFreeApps = () => createSelector(
   makeSelectSearchKeyword(),
   (allFreeApps, keyword) =>
     // filter() will only return apps that contains the keyword
-    allFreeApps.filter((app) => app.name.indexOf(keyword) > -1)
+    allFreeApps.filter((app) => app.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1)
 
 )
 
