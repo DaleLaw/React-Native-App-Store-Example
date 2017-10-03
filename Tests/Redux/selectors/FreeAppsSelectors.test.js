@@ -1,5 +1,5 @@
 import Immutable from 'seamless-immutable'
-import { selectFreeAppsDomain, makeSelectAllFreeApps, makeSelectFilteredFreeApps, makeSelectCurrentPageAppIds, makeSelectFreeAppsFetchState } from '../../../App/Redux/selectors/FreeAppsSelectors'
+import { selectFreeAppsDomain, makeSelectCurrentPage, makeSelectAllFreeApps, makeSelectPagesFreeApps, makeSelectFilteredFreeApps, makeSelectCurrentPageAppIds, makeSelectFreeAppsFetchState } from '../../../App/Redux/selectors/FreeAppsSelectors'
 import FetchState from '../../../App/Constants/FetchState'
 
 describe('FreeAppsSelectors', () => {
@@ -26,8 +26,24 @@ describe('FreeAppsSelectors', () => {
     expect(selector(globalState)).toEqual(globalState.freeApps)
   })
 
+  it('should select currentPage', () => {
+    const selector = makeSelectCurrentPage()
+    expect(selector(globalState)).toEqual(0)
+  })
+
   it('should select all free apps', () => {
     const selector = makeSelectAllFreeApps()
+    expect(selector(globalState)).toEqual([
+      { id: 1, img: '', name: 'aaa', category: 'Games', fetchState: FetchState.SUCCESS, averageUserRating: 4, userRatingCount: 10 },
+      { id: 2, img: '', name: 'bbb', category: 'Games', fetchState: FetchState.SUCCESS, averageUserRating: 4, userRatingCount: 10 },
+      { id: 3, img: '', name: 'testccc', category: 'Games', fetchState: FetchState.SUCCESS, averageUserRating: 4, userRatingCount: 10 },
+      { id: 4, img: '', name: 'ddd', category: 'Games', fetchState: FetchState.SUCCESS, averageUserRating: 4, userRatingCount: 10 },
+      { id: 5, img: '', name: 'eeetest', category: 'Games', fetchState: FetchState.SUCCESS, averageUserRating: 4, userRatingCount: 10 },
+    ])
+  })
+
+  it('should select pages Apps', () => {
+    const selector = makeSelectPagesFreeApps()
     expect(selector(globalState)).toEqual([
       { id: 1, img: '', name: 'aaa', category: 'Games', fetchState: FetchState.SUCCESS, averageUserRating: 4, userRatingCount: 10 },
       { id: 2, img: '', name: 'bbb', category: 'Games', fetchState: FetchState.SUCCESS, averageUserRating: 4, userRatingCount: 10 },
