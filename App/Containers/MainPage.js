@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Keyboard, FlatList } from 'react-native'
+import { FlatList, ActivityIndicator } from 'react-native'
 import styled from 'styled-components/native'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container } from 'native-base'
 import AppSearchBar from '../Components/AppSearchBar'
-import NoResultPlaceholder from '../Components/NoResultPlaceholder'
+import EmptyPlaceholder from '../Components/EmptyPlaceholder'
 import RecommendationCell from '../Components/RecommendationCell'
 import FreeAppCell from '../Components/FreeAppCell'
 import { makeSelectSearchKeyword } from '../Redux/selectors/SearchSelectors'
 import { makeSelectFilteredFreeApps, makeSelectFreeAppsFetchState, makeSelectCurrentPage } from '../Redux/selectors/FreeAppsSelectors'
 import { makeSelectFilteredRecommendations, makeSelectRecommendationsFetchState } from '../Redux/selectors/RecommendationsSelectors'
 import { initAppList, loadNextPage, search } from '../Redux/actions'
+import FetchState from '../Constants/FetchState'
 
 const RecommendationListWrapper = styled.View`
   padding-top: 12;
@@ -36,8 +37,14 @@ const Wrapper = styled(Container)`
   background: white;
 `
 
+const MyActivityIndicator = styled(ActivityIndicator)`
+  padding-top: 16;
+  padding-bottom: 16;
+`
+
 export class MainPage extends Component {
   static propTypes = {
+    freeAppListFetchState: PropTypes.string.isRequired,
     initAppList: PropTypes.func.isRequired,
     loadNextPage: PropTypes.func.isRequired,
     search: PropTypes.func.isRequired,
@@ -118,23 +125,29 @@ export class MainPage extends Component {
   renderSeparator = () => <Separator />
 
   render() {
-    const { freeApps, recommendations, keyword } = this.props
+    const { freeAppListFetchState, freeApps, recommendations, keyword } = this.props
     const listItems = ['First Row Is Recommendations'].concat(freeApps)
-    const showNoResultPlaceholder = keyword !== '' && recommendations.length === 0 && freeApps.length === 0
+    const showEmptyPlaceholder = (freeAppListFetchState === FetchState.FAILED) || (keyword !== '' && recommendations.length === 0 && freeApps.length === 0)
+    const placeholderText = freeAppListFetchState === FetchState.FAILED ? 'Failed to get data from server' : 'No results found'
+
     return (
       <Wrapper>
         <AppSearchBar onSearchTextChange={this.onSearchTextChange} />
-        <FlatList
-          onScroll={this.onScrollVerticalList}
-          onContentSizeChange={this.onContentSizeChange}
-          scrollEventThrottle={2000}
-          data={listItems}
-          keyExtractor={this.keyExtractor}
-          renderItem={this.renderWholeList}
-          ItemSeparatorComponent={this.renderSeparator}
-        />
         {
-          showNoResultPlaceholder ? <NoResultPlaceholder /> : null
+          freeAppListFetchState === FetchState.IN_PROGRESS ?
+            <MyActivityIndicator /> :
+            <FlatList
+              onScroll={this.onScrollVerticalList}
+              onContentSizeChange={this.onContentSizeChange}
+              scrollEventThrottle={2000}
+              data={listItems}
+              keyExtractor={this.keyExtractor}
+              renderItem={this.renderWholeList}
+              ItemSeparatorComponent={this.renderSeparator}
+            />
+        }
+        {
+          showEmptyPlaceholder ? <EmptyPlaceholder text={placeholderText} /> : null
         }
       </Wrapper>
     )

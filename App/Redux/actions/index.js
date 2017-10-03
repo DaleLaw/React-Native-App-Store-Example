@@ -46,7 +46,7 @@ export const fetchRecommendationsSuccess = (apps, ids) => ({
 })
 
 export const fetchRecommendationsFailed = (error) => ({
-  type: FETCH_RECOMMENDATIONS_SUCCESS,
+  type: FETCH_RECOMMENDATIONS_FAILED,
   error,
 })
 

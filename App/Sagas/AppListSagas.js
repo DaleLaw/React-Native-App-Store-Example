@@ -45,8 +45,10 @@ export function* fetchFreeApps() {
       error: null,
     }))
     yield put(fetchTopFreeAppsSuccess(apps, ids))
+    // yield put(loadNextPage()) // Immediately load first page details
   } catch (e) {
-    yield put(fetchTopFreeAppsFailed(e.message))
+    const message = e && e.message ? e.message : 'Unable to connect to server'
+    yield put(fetchTopFreeAppsFailed(message))
   }
 }
 
@@ -64,7 +66,8 @@ export function* fetchRecommendations() {
     }))
     yield put(fetchRecommendationsSuccess(apps, ids))
   } catch (e) {
-    yield put(fetchRecommendationsFailed(e.message))
+    const message = e && e.message ? e.message : 'Unable to connect to server'
+    yield put(fetchRecommendationsFailed(message))
   }
 }
 
@@ -78,7 +81,8 @@ export function* fetchAppDetails(appId) {
     }
     yield put(fetchAppDetailsSuccess(appId, details))
   } catch (e) {
-    yield put(fetchAppDetailsFailed(e.message))
+    const message = e && e.message ? e.message : 'Unable to connect to server'
+    yield put(fetchAppDetailsFailed(message))
   }
 }
 
@@ -89,5 +93,4 @@ export function* loadNextPageSaga() {
 
 export function* initAppListSaga() {
   yield all([call(fetchRecommendations), call(fetchFreeApps)])
-  yield put(loadNextPage()) // Immediately load first page details
 }
