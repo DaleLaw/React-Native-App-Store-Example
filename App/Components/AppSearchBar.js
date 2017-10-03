@@ -1,9 +1,13 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components/native'
 import { Header, Item, Input, Icon } from 'native-base'
 
+const MHeader = styled(Header)`
+  background: whitesmoke;
+`
 
-class AppSearchBar extends Component {
+class AppSearchBar extends PureComponent {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
   }
@@ -24,7 +28,7 @@ class AppSearchBar extends Component {
 
   render() {
     return (
-      <Header searchBar rounded>
+      <MHeader searchBar rounded>
         <Item>
           <Icon name='ios-search' />
           <Input
@@ -35,7 +39,7 @@ class AppSearchBar extends Component {
             onSubmitEditing={this.onSubmitEditing}
           />
         </Item>
-      </Header>
+      </MHeader>
     )
   }
 }

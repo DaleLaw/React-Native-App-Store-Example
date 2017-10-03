@@ -71,9 +71,9 @@ export function* fetchRecommendations() {
 export function* fetchAppDetails(appId) {
   try {
     const response = yield autoRetry(call(api.getAppDetails, appId))
-    const result = response.data.result
+    const result = response.data.results[0]
     const details = {
-      averageUserRating: result.averageuserRating,
+      averageUserRating: result.averageUserRating,
       userRatingCount: result.userRatingCount,
     }
     yield put(fetchAppDetailsSuccess(appId, details))

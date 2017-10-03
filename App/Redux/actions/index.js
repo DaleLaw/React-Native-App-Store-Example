@@ -54,9 +54,8 @@ export const initAppList = () => ({
   type: INIT_APP_LIST,
 })
 
-export const loadNextPage = (nextPage) => ({
+export const loadNextPage = () => ({
   type: LOAD_NEXT_PAGE,
-  nextPage,
 })
 
 export const search = (keyword) => ({

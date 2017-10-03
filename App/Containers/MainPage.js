@@ -1,15 +1,39 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Orientation from 'react-native-orientation'
-import { StatusBar, Keyboard, FlatList, View, ScrollView } from 'react-native'
+import { Keyboard, FlatList } from 'react-native'
 import styled from 'styled-components/native'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { Container, Content, Text } from 'native-base'
+import { Container } from 'native-base'
 import AppSearchBar from '../Components/AppSearchBar'
+import RecommendationCell from '../Components/RecommendationCell'
+import FreeAppCell from '../Components/FreeAppCell'
+import { makeSelectSearchKeyword } from '../Redux/selectors/SearchSelectors'
 import { makeSelectFilteredFreeApps, makeSelectFreeAppsFetchState, makeSelectCurrentPage } from '../Redux/selectors/FreeAppsSelectors'
 import { makeSelectFilteredRecommendations, makeSelectRecommendationsFetchState } from '../Redux/selectors/RecommendationsSelectors'
 import { initAppList, loadNextPage, search } from '../Redux/actions'
+
+const RecommendationListWrapper = styled.View`
+  padding-top: 12;
+  padding-left: 8;
+  padding-right: 8;
+`
+
+const RecommendationText = styled.Text`
+  font-size: 20;
+  padding-left: 8;
+  padding-bottom: 12;
+`
+
+const Separator = styled.View`
+  height: 2;
+  width: 100%;
+  backgroundColor: whitesmoke;
+`
+
+const Wrapper = styled(Container)`
+  background: white;
+`
 
 export class MainPage extends Component {
   static propTypes = {
@@ -19,6 +43,7 @@ export class MainPage extends Component {
     currentPage: PropTypes.number.isRequired,
     freeApps: PropTypes.array.isRequired,
     recommendations: PropTypes.array.isRequired,
+    keyword: PropTypes.string.isRequired,
   }
 
   state = {
@@ -29,22 +54,21 @@ export class MainPage extends Component {
     this.props.initAppList()
   }
 
-  componentDidUpdate = (prevProps) => {
-    if (this.props.currentPage !== prevProps.currentPage) {
-      this.setState({
-        loadingNextPage: false,
-      })
-    }
-  }
-
   onSubmit = (text) => {
     this.props.search(text)
     Keyboard.dismiss()
   }
 
+  onContentSizeChange = () => {
+    this.setState({
+      loadingNextPage: false,
+    })
+  }
+
   onScrollVerticalList = ({ nativeEvent }) => {
-    const { loadingNextPage } = this.state
-    if (this.isCloseToBottom(nativeEvent) && !loadingNextPage) {
+    const { currentPage, keyword } = this.props
+    const isSearching = keyword !== ''
+    if (this.isCloseToBottom(nativeEvent) && !isSearching && !this.state.loadingNextPage && currentPage < 10) {
       this.setState({
         loadingNextPage: true,
       })
@@ -60,37 +84,49 @@ export class MainPage extends Component {
 
   keyExtractor = (item, index) => index;
 
-  renderRecommendation = ({ item, index }) => {
-    return <View style={{ width: 200 }}><Text>Item(R)</Text></View>
-  }
+  renderRecommendation = ({ item, index }) => (
+    <RecommendationCell item={item} index={index} />
+  )
 
-  renderFreeApp = ({ item, index }) => {
-    const { recommendations } = this.props
-    if (index === 0) {
-      return (<FlatList
-        data={recommendations}
+  renderRecommendationsList = () => (
+    <RecommendationListWrapper>
+      <RecommendationText>
+        Recommendations
+      </RecommendationText>
+      <FlatList
+        data={this.props.recommendations}
         keyExtractor={this.keyExtractor}
         renderItem={this.renderRecommendation}
         horizontal
-      />)
+      />
+    </RecommendationListWrapper>
+  )
+
+  renderWholeList = ({ item, index }) => {
+    if (index === 0) {
+      return this.renderRecommendationsList()
     }
-    return <View style={{ height: 200 }}><Text>Item(F){index}</Text></View>
+    return <FreeAppCell item={item} index={index - 1} />
   }
+
+  renderSeparator = () => <Separator />
 
   render() {
     const { freeApps } = this.props
     const listItems = ['First Row Is Recommendations'].concat(freeApps)
     return (
-      <Container>
+      <Wrapper>
         <AppSearchBar onSubmit={this.onSubmit} />
         <FlatList
           onScroll={this.onScrollVerticalList}
-          scrollEventThrottle={400}
+          onContentSizeChange={this.onContentSizeChange}
+          scrollEventThrottle={2000}
           data={listItems}
           keyExtractor={this.keyExtractor}
-          renderItem={this.renderFreeApp}
+          renderItem={this.renderWholeList}
+          ItemSeparatorComponent={this.renderSeparator}
         />
-      </Container>
+      </Wrapper>
     )
   }
 }
@@ -100,13 +136,14 @@ export const mapStateToProps = createStructuredSelector({
   recommendations: makeSelectFilteredRecommendations(),
   recommendationsFetchState: makeSelectRecommendationsFetchState(),
   currentPage: makeSelectCurrentPage(),
+  keyword: makeSelectSearchKeyword(),
 })
 
 export const mapDispatchToProps = (dispatch) => ({
   dispatch,
   initAppList: () => dispatch(initAppList()),
   loadNextPage: () => dispatch(loadNextPage()),
-  search: () => dispatch(search()),
+  search: (text) => dispatch(search(text)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage)
