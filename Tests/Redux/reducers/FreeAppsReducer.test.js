@@ -1,4 +1,3 @@
-import Immutable from 'seamless-immutable'
 import { initialState, freeApps } from '../../../App/Redux/reducers/FreeAppsReducer'
 import {
   RESET,

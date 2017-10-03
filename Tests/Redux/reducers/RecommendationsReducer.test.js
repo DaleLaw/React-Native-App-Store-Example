@@ -1,4 +1,3 @@
-import Immutable from 'seamless-immutable'
 import { initialState, recommendations } from '../../../App/Redux/reducers/RecommendationsReducer'
 import { INIT_APP_LIST, FETCH_RECOMMENDATIONS_SUCCESS, FETCH_RECOMMENDATIONS_FAILED, RESET } from '../../../App/Redux/actions'
 import FetchState from '../../../App/Constants/FetchState'

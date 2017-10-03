@@ -1,5 +1,5 @@
 import Immutable from 'seamless-immutable'
-import { selectSearchDomain, makeSelectSearch, makeSelectSearchKeyword } from '../../../App/Redux/selectors/SearchSelectors'
+import { selectSearchDomain, makeSelectSearchKeyword } from '../../../App/Redux/selectors/SearchSelectors'
 
 describe('SearchSelectors', () => {
   const globalState = Immutable({
