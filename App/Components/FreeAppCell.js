@@ -23,7 +23,9 @@ const Index = styled.Text`
 const AppImage = styled.Image`
   height: 70;
   width: 70;
-  border-radius: 20;
+  padding-top: 2;
+  padding-bottom: 2;
+  border-radius: ${(props) => props.index % 2 === 1 ? 20 : 35};
 `
 
 const InfoWrapper = styled.View`
@@ -71,6 +73,7 @@ class FreeAppCell extends PureComponent {
           {index + 1}
         </Index>
         <AppImage
+          index={index + 1}
           source={{ uri: img }}
         />
         <InfoWrapper>
