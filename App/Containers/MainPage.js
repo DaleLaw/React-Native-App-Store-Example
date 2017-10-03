@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FlatList, ActivityIndicator } from 'react-native'
+import { FlatList } from 'react-native'
 import styled from 'styled-components/native'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
